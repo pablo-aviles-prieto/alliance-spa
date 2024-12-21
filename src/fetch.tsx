@@ -1,41 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
-import { graphql } from './graphql';
-import { GetImagesQuery, GetImagesQueryVariables } from './graphql/graphql';
-import { execute } from './graphql/execute';
-
-const getImagesQuery = graphql(`
-  query GetImages($after: String, $first: Int = 20) {
-    images(first: $first, after: $after) {
-      nodes {
-        id
-        title
-        picture
-        author
-        likesCount
-        liked
-        createdAt
-        updatedAt
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-    }
-  }
-`);
+import { useInfiniteQuery } from '@tanstack/react-query';
+import GraphqlClient from './services/graphql-client';
 
 export const FetchData = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['images'],
-    queryFn: async () => {
-      // const variables: GetImagesQueryVariables = undefined;
-      return execute<GetImagesQuery, GetImagesQueryVariables>(getImagesQuery, {});
-    },
-  });
+  const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(
+    GraphqlClient.getImagesQueryOptions({})
+  );
 
   console.log('data', data);
-  console.log('error', error);
   console.log('isLoading', isLoading);
+  console.log('hasNextPage', hasNextPage);
 
-  return <div>Check</div>;
+  const flattenedImages = data?.pages.flatMap(page => page.nodes) || [];
+  console.log('flattenedImages', flattenedImages);
+
+  return (
+    <>
+      <div>Check</div>
+      {hasNextPage && <button onClick={() => fetchNextPage()}>Load more</button>}
+    </>
+  );
 };

@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   schema: 'https://sandbox-api-test.samyroad.com/graphql',
-  documents: ['src/**/*.tsx'],
+  documents: ['src/queries/**/*.{ts,tsx}'],
   ignoreNoDocuments: true,
   generates: {
     './src/graphql/': {
