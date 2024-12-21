@@ -29,7 +29,7 @@ export const FetchData = () => {
     queryKey: ['images'],
     queryFn: async () => {
       // const variables: GetImagesQueryVariables = undefined;
-      return execute<GetImagesQuery, GetImagesQueryVariables>(getImagesQuery);
+      return execute<GetImagesQuery, GetImagesQueryVariables>(getImagesQuery, {});
     },
   });
 

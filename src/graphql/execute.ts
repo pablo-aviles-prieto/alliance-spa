@@ -2,8 +2,7 @@ import type { TypedDocumentString } from './graphql';
 
 export async function execute<TResult, TVariables>(
   query: TypedDocumentString<TResult, TVariables>,
-  variables?: TVariables
-  // ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
+  ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
 ) {
   const response = await fetch('https://sandbox-api-test.samyroad.com/graphql', {
     method: 'POST',
