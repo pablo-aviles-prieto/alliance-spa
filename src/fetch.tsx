@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
+
 import GraphqlRepository from '@/services/graphql-repository';
 
 export const FetchData = () => {
