@@ -19,6 +19,9 @@ export default {
         'auto-fill-400': 'repeat(auto-fill, minmax(400px, 1fr))',
         'auto-fit-400': 'repeat(auto-fit, minmax(400px, 1fr))',
       },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
     },
   },
   plugins: [],

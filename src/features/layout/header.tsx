@@ -8,7 +8,12 @@ export const LayoutHeader = () => {
         <div>
           <SammyLogo />
         </div>
-        <div>Search input</div>
+        <div>
+          <input
+            className='min-h-[30px] min-w-[270px] rounded-[20px] bg-[#F2F2F2] px-6'
+            placeholder={`You're looking for something?`}
+          />
+        </div>
       </LayoutContentContainer>
     </header>
   );
