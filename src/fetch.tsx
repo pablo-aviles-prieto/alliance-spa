@@ -1,9 +1,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import GraphqlClient from './services/graphql-client';
+import GraphqlRepository from './services/graphql-repository';
 
 export const FetchData = () => {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    GraphqlClient.getImagesQueryOptions({})
+    GraphqlRepository.getImagesQueryOptions({})
   );
 
   console.log('data', data);
