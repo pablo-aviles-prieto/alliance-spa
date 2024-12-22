@@ -12,7 +12,7 @@ export const FetchData = () => {
 
   return (
     <>
-      <div className='text-red-300'>Check</div>
+      <div className='size-4 text-red-300'>Check</div>
       {hasNextPage && (
         <button className='bg-blue-500' onClick={() => fetchNextPage()}>
           Load more
