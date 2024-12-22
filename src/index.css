@@ -6,5 +6,6 @@
   :root {
     --primary-background: 0 0% 100%;
     --secondary-background: 0 0% 96%;
+    --header-height: 120px;
   }
 }

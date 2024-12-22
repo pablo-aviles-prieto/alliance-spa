@@ -4,7 +4,7 @@ import { LayoutContentContainer } from '@/components/containers/content-layout';
 export const LayoutHeader = () => {
   return (
     <header className='bg-primary'>
-      <LayoutContentContainer className='flex h-[120px] items-center justify-between bg-primary'>
+      <LayoutContentContainer className='flex h-[var(--header-height)] items-center justify-between'>
         <div>
           <SammyLogo />
         </div>
