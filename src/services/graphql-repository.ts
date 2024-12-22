@@ -1,10 +1,11 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
-import { getImagesQuery } from '@/queries/get-images';
+
 import type {
   GetImagesQuery,
   GetImagesQueryVariables,
   TypedDocumentString,
 } from '@/graphql/graphql';
+import { getImagesQuery } from '@/queries/get-images';
 
 class GraphqlRepository {
   private endpoint = 'https://sandbox-api-test.samyroad.com/graphql';
