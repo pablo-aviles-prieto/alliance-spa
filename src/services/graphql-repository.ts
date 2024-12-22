@@ -1,9 +1,13 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
-import { GetImagesQuery, GetImagesQueryVariables, TypedDocumentString } from '../graphql/graphql';
-import { getImagesQuery } from '../queries/get-images';
+import { getImagesQuery } from '@/queries/get-images';
+import type {
+  GetImagesQuery,
+  GetImagesQueryVariables,
+  TypedDocumentString,
+} from '@/graphql/graphql';
 
-class GraphqlClient {
-  private endpoint: string = 'https://sandbox-api-test.samyroad.com/graphql';
+class GraphqlRepository {
+  private endpoint = 'https://sandbox-api-test.samyroad.com/graphql';
 
   protected async execute<TResult, TVariables>(
     query: TypedDocumentString<TResult, TVariables>,
@@ -32,7 +36,6 @@ class GraphqlClient {
     return infiniteQueryOptions({
       queryKey: ['images', variables],
       queryFn: async ({ pageParam }) => {
-        console.log('pageParam', pageParam);
         const enhancedVariables = pageParam ? { ...variables, after: pageParam } : variables;
         const result = await this.execute<GetImagesQuery, GetImagesQueryVariables>(
           getImagesQuery,
@@ -40,12 +43,12 @@ class GraphqlClient {
         );
         return result.data.images;
       },
-      getNextPageParam: lastPage => {
-        return lastPage.pageInfo.hasNextPage ? lastPage.pageInfo.endCursor : undefined;
+      getNextPageParam: ({ pageInfo }) => {
+        return pageInfo.hasNextPage ? pageInfo.endCursor : undefined;
       },
       initialPageParam: undefined as string | undefined,
     });
   }
 }
 
-export default new GraphqlClient();
+export default new GraphqlRepository();
