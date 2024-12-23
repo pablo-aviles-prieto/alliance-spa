@@ -1,8 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { useSearch } from '@/context/search-context';
 import GraphqlRepository from '@/services/graphql-repository';
 
 export const FetchData = () => {
+  const { searchWord } = useSearch();
+  console.log('searchWord', searchWord);
+
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
     GraphqlRepository.getImagesQueryOptions({})
   );
