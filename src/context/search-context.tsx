@@ -8,7 +8,9 @@ interface SearchContextValue {
 const SearchContext = createContext<SearchContextValue | undefined>(undefined);
 
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
-  const [searchWord, setSearchWord] = useState('');
+  const url = new URL(window.location.href);
+  const initialSearch = url.searchParams.get('search') || '';
+  const [searchWord, setSearchWord] = useState(initialSearch);
 
   return (
     <SearchContext.Provider value={{ searchWord, setSearchWord }}>

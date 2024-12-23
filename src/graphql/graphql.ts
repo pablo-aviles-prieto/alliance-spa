@@ -1,21 +1,26 @@
 /* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** An ISO 8601-encoded datetime */
-  ISO8601DateTime: { input: any; output: any; }
+  ISO8601DateTime: { input: any; output: any };
 };
 
 export type Image = {
@@ -71,7 +76,6 @@ export type Mutation = {
   likeImage?: Maybe<LikeImagePayload>;
 };
 
-
 export type MutationLikeImageArgs = {
   input: LikeImageInput;
 };
@@ -94,7 +98,6 @@ export type Query = {
   images: ImageConnection;
 };
 
-
 export type QueryImagesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -106,10 +109,27 @@ export type QueryImagesArgs = {
 export type GetImagesQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-
-export type GetImagesQuery = { __typename?: 'Query', images: { __typename?: 'ImageConnection', nodes?: Array<{ __typename?: 'Image', id: string, title?: string | null, picture?: string | null, author?: string | null, likesCount?: number | null, liked?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+export type GetImagesQuery = {
+  __typename?: 'Query';
+  images: {
+    __typename?: 'ImageConnection';
+    nodes?: Array<{
+      __typename?: 'Image';
+      id: string;
+      title?: string | null;
+      picture?: string | null;
+      author?: string | null;
+      likesCount?: number | null;
+      liked?: boolean | null;
+      createdAt?: any | null;
+      updatedAt?: any | null;
+    } | null> | null;
+    pageInfo: { __typename?: 'PageInfo'; hasNextPage: boolean; endCursor?: string | null };
+  };
+};
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -117,7 +137,10 @@ export class TypedDocumentString<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
 
-  constructor(private value: string, public __meta__?: Record<string, any> | undefined) {
+  constructor(
+    private value: string,
+    public __meta__?: Record<string, any> | undefined
+  ) {
     super(value);
   }
 
@@ -127,8 +150,8 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const GetImagesDocument = new TypedDocumentString(`
-    query GetImages($after: String, $first: Int = 20) {
-  images(first: $first, after: $after) {
+    query GetImages($after: String, $first: Int = 20, $title: String) {
+  images(first: $first, after: $after, title: $title) {
     nodes {
       id
       title
