@@ -7,6 +7,20 @@ interface CardProps {
   image: Image;
 }
 
+interface ImageActionsProps {
+  likesCount: number;
+  liked: boolean;
+}
+
+interface LikeSectionProps extends ImageActionsProps {
+  className?: string;
+}
+
+interface FooterProps extends ImageActionsProps {
+  title: string;
+  author: string;
+}
+
 const PriceBadge = ({ price }: { price: string }) => {
   return (
     <div className='absolute left-0 top-0'>
@@ -19,43 +33,61 @@ const PriceBadge = ({ price }: { price: string }) => {
   );
 };
 
-// TODO?: When clicked share icon, copy the image to clipboard
-const ImageActions = ({ likesCount, liked }: { likesCount: number; liked: boolean }) => {
+const LikeSection = ({ likesCount, liked, className }: LikeSectionProps) => {
   return (
-    <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white group-hover:visible'>
-      <div className='flex flex-col items-center gap-y-1'>
-        <button onClick={() => console.log('like')}>
-          <LikeIcon
-            className={cn(
-              'size-6 fill-none text-red-400 hover:text-red-500',
-              liked && 'fill-current'
-            )}
-          />
-        </button>
-        <p>{likesCount}</p>
-      </div>
-      <div className='flex flex-col items-center gap-y-1'>
-        <button>
-          <ShareIcon className='size-6' />
-        </button>
-        <p>0</p>
-      </div>
+    <div className={cn('flex items-center justify-center gap-1 sm:flex-col', className)}>
+      <p className='sm:order-1'>{likesCount}</p>
+      <button onClick={() => console.log('like')}>
+        <LikeIcon
+          className={cn('size-6 text-red-400 hover:text-red-500', liked && 'fill-current')}
+        />
+      </button>
     </div>
   );
 };
 
-const FooterCard = ({ author, title }: { title: string; author: string }) => {
+const ShareSection = ({ className }: { className?: string }) => {
   return (
-    <footer className='flex h-[100px] flex-col items-center justify-center border border-soft-gray px-2'>
-      <h3 className='line-clamp-1 text-2xl uppercase'>{title}</h3>
-      <p className='text-soft-gray'>
-        by <span className='text-black'>{author}</span>
-      </p>
+    <div className={cn('flex items-center justify-center gap-1 sm:flex-col', className)}>
+      <p className='sm:order-1'>0</p>
+      <button>
+        <ShareIcon className='size-6' />
+      </button>
+    </div>
+  );
+};
+
+// TODO?: When clicked share icon, copy the image to clipboard
+const ImageActions = ({ likesCount, liked }: ImageActionsProps) => {
+  return (
+    <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white sm:group-hover:visible'>
+      <LikeSection liked={liked} likesCount={likesCount} />
+      <ShareSection />
+    </div>
+  );
+};
+
+const Footer = ({ author, title, liked, likesCount }: FooterProps) => {
+  return (
+    <footer>
+      <div className='flex h-[100px] flex-col items-center justify-center border border-soft-gray px-2'>
+        <h3 className='line-clamp-1 text-2xl uppercase'>{title}</h3>
+        <p className='text-soft-gray'>
+          by <span className='text-black'>{author}</span>
+        </p>
+      </div>
+      <div className='flex h-14 border border-t-0 border-soft-gray sm:hidden'>
+        <LikeSection
+          className='w-full border-r border-soft-gray'
+          liked={liked}
+          likesCount={likesCount}
+        />
+        <ShareSection className='w-full' />
+      </div>
     </footer>
   );
 };
 
-// TODO: Add the likes and download button? - Style it for mobile and desktop
 // TODO: If no price, not show pricebadge (if not a single item has price, display it
 // based on >200 likes a random price)
 export const ImagesCard = ({ image }: CardProps) => {
@@ -78,7 +110,14 @@ export const ImagesCard = ({ image }: CardProps) => {
           </>
         )}
       </header>
-      {image.author && image.title && <FooterCard author={image.author} title={image.title} />}
+      {image.author && image.title && image.likesCount ? (
+        <Footer
+          author={image.author}
+          title={image.title}
+          liked={!!image.liked}
+          likesCount={image.likesCount}
+        />
+      ) : null}
     </div>
   );
 };
