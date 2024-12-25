@@ -1,5 +1,5 @@
-import { ImagesCard } from '@/components/cards/images-card';
-import { GridContainer } from '@/components/grid-container';
+import { GridContainer } from '@/components/containers/grid-container';
+import { ImagesCard } from '@/features/landing/components/images-card';
 import { Image } from '@/graphql/graphql';
 
 interface ImagesGridProps {
