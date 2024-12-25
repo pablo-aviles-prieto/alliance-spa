@@ -25,7 +25,7 @@ export const LayoutContentContainer = <E extends ElementType = typeof defaultEle
   const Component = as ?? defaultElement;
 
   return (
-    <Component {...restProps} className={cn('mx-auto max-w-[90%] lg:max-w-[80%]', className)}>
+    <Component {...restProps} className={cn('mx-auto max-w-7xl px-8 xl:px-0', className)}>
       {children}
     </Component>
   );

@@ -30,21 +30,18 @@ export const LayoutHeader = () => {
   };
 
   return (
-    <header className='bg-primary'>
-      <LayoutContentContainer className='flex h-[var(--header-height)] flex-col items-start justify-between py-6 sm:flex-row sm:items-center'>
-        <div>
-          <SammyLogo />
-        </div>
-        <div className='mx-auto flex min-h-[30px] min-w-[270px] items-center justify-center gap-x-1 rounded-[20px] bg-[#F2F2F2] px-2 sm:mx-0'>
-          <SearchIcon />
-          <input
-            className='min-w-[220px] bg-inherit focus:outline-none'
-            placeholder={`You're looking for something?`}
-            value={searchInput}
-            onChange={handleChange}
-          />
-        </div>
-      </LayoutContentContainer>
-    </header>
+    <LayoutContentContainer className='flex h-[var(--header-height)] flex-col items-start justify-between bg-primary py-6 sm:flex-row sm:items-center'>
+      <SammyLogo />
+      {/* TODO: Export into his own component */}
+      <div className='mx-auto flex min-h-[30px] min-w-[270px] items-center justify-center gap-x-1 rounded-[20px] bg-[#F2F2F2] px-2 sm:mx-0'>
+        <SearchIcon />
+        <input
+          className='min-w-[220px] bg-inherit focus:outline-none'
+          placeholder={`You're looking for something?`}
+          value={searchInput}
+          onChange={handleChange}
+        />
+      </div>
+    </LayoutContentContainer>
   );
 };

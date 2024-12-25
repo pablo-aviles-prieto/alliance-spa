@@ -17,7 +17,10 @@ export const MainContent = () => {
 
   return (
     <main className='bg-secondary'>
-      <LayoutContentContainer className='min-h-[calc(100vh-var(--header-height))]'>
+      <LayoutContentContainer
+        as='main'
+        className='min-h-[calc(100vh-var(--header-height))] py-7 xl:py-14'
+      >
         <ImagesGrid imagesData={flattenedImages} />
         {hasNextPage && (
           <button className='bg-blue-500' onClick={() => fetchNextPage()}>
