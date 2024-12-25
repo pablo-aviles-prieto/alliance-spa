@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      colors: {
+        'soft-gray': 'hsl(var(--soft-gray))',
+      },
       backgroundColor: {
         primary: 'hsl(var(--primary-background))',
         secondary: 'hsl(var(--secondary-background))',

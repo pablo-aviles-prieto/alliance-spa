@@ -108,8 +108,8 @@ export type QueryImagesArgs = {
 
 export type GetImagesQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type GetImagesQuery = {
@@ -150,7 +150,7 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const GetImagesDocument = new TypedDocumentString(`
-    query GetImages($after: String, $first: Int = 20, $title: String) {
+    query GetImages($after: String, $title: String, $first: Int = 20) {
   images(first: $first, after: $after, title: $title) {
     nodes {
       id
