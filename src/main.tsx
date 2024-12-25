@@ -10,6 +10,8 @@ import '@/index.css';
 
 const queryClient = new QueryClient();
 
+// TODO: Make scrollbar thin
+// TODO: Add unit and e2e tests
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

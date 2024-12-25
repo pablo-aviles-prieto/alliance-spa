@@ -34,7 +34,7 @@ export const LayoutHeader = () => {
       <SammyLogo />
       {/* TODO: Export into his own component */}
       <div className='mx-auto flex min-h-[30px] min-w-[270px] items-center justify-center gap-x-1 rounded-[20px] bg-[#F2F2F2] px-2 sm:mx-0'>
-        <SearchIcon />
+        <SearchIcon className='size-5' />
         <input
           className='min-w-[220px] bg-inherit focus:outline-none'
           placeholder={`You're looking for something?`}

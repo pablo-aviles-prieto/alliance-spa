@@ -15,6 +15,9 @@ export const MainContent = () => {
 
   const flattenedImages = data?.pages.flatMap(page => page.nodes).filter(nonNullable) || [];
 
+  // TODO: Add the observe for infinite query
+  // TODO: Style when the flattenedImages has 0 length
+  // TODO: Add a placeholder when loading data
   return (
     <main className='bg-secondary'>
       <LayoutContentContainer
