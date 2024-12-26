@@ -22,7 +22,7 @@ export const ImagesCard = ({ image }: CardProps) => {
                 src={image.picture}
                 alt={image.title ?? 'Image'}
               />
-            </picture>
+            </picture>{' '}
             {image.likesCount ? (
               <ImageActions
                 imageId={image.id}

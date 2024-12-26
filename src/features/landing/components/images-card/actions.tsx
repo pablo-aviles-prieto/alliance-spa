@@ -45,9 +45,12 @@ export const ShareSection = ({ imageUrl, className }: { imageUrl: string; classN
 
 export const ImageActions = ({ likesCount, liked, imageId, imageUrl }: ImageActionsProps) => {
   return (
-    <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white sm:group-hover:visible'>
-      <LikeSection imageId={imageId} liked={liked} likesCount={likesCount} />
-      <ShareSection imageUrl={imageUrl} />
-    </div>
+    <>
+      <div className='absolute bottom-0 left-0 h-[150px] w-full bg-gradient-to-t from-neutral-700 to-transparent opacity-0 transition-opacity sm:group-hover:opacity-50' />
+      <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white sm:group-hover:visible'>
+        <LikeSection imageId={imageId} liked={liked} likesCount={likesCount} />
+        <ShareSection imageUrl={imageUrl} />
+      </div>
+    </>
   );
 };
