@@ -26,6 +26,10 @@
   }
 }
 
+* {
+  scrollbar-width: thin;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   font-optical-sizing: auto;
