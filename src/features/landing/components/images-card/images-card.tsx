@@ -28,6 +28,7 @@ export const ImagesCard = ({ image }: CardProps) => {
                 imageId={image.id}
                 likesCount={image.likesCount}
                 liked={!!image.liked}
+                imageUrl={image.picture}
               />
             ) : null}
           </>

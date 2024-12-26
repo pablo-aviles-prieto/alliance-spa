@@ -23,7 +23,7 @@ export const Footer = ({ image }: FooterProps) => {
             imageId={image.id}
           />
         ) : null}
-        <ShareSection className='w-full' />
+        <ShareSection imageUrl={image.picture ?? ''} className='w-full' />
       </div>
     </footer>
   );

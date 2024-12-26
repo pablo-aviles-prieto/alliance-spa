@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { LikeIcon } from '@/assets/icons/like';
 import { ShareIcon } from '@/assets/icons/share';
+import { copyToClipboard } from '@/features/landing/utils/copy-to-clipboard';
 import { cn } from '@/lib/utils';
 import graphqlRepository from '@/services/graphql-repository';
 
@@ -9,9 +10,10 @@ interface ImageActionsProps {
   likesCount: number;
   liked: boolean;
   imageId: string;
+  imageUrl: string;
 }
 
-interface LikeSectionProps extends ImageActionsProps {
+interface LikeSectionProps extends Omit<ImageActionsProps, 'imageUrl'> {
   className?: string;
 }
 
@@ -30,22 +32,22 @@ export const LikeSection = ({ likesCount, liked, className, imageId }: LikeSecti
   );
 };
 
-export const ShareSection = ({ className }: { className?: string }) => {
+export const ShareSection = ({ imageUrl, className }: { imageUrl: string; className?: string }) => {
   return (
     <div className={cn('flex items-center justify-center gap-1 sm:flex-col', className)}>
       <p className='sm:order-1'>0</p>
-      <button onClick={() => console.log('click')}>
+      <button onClick={() => copyToClipboard(imageUrl)}>
         <ShareIcon className='size-6' />
       </button>
     </div>
   );
 };
 
-export const ImageActions = ({ likesCount, liked, imageId }: ImageActionsProps) => {
+export const ImageActions = ({ likesCount, liked, imageId, imageUrl }: ImageActionsProps) => {
   return (
     <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white sm:group-hover:visible'>
       <LikeSection imageId={imageId} liked={liked} likesCount={likesCount} />
-      <ShareSection />
+      <ShareSection imageUrl={imageUrl} />
     </div>
   );
 };
