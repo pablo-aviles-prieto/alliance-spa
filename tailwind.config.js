@@ -3,6 +3,13 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      colors: {
+        'soft-gray': 'hsl(var(--soft-gray))',
+      },
+      backgroundColor: {
+        primary: 'hsl(var(--primary-background))',
+        secondary: 'hsl(var(--secondary-background))',
+      },
       gridTemplateColumns: {
         'auto-fill-100': 'repeat(auto-fill, minmax(100px, 1fr))',
         'auto-fit-100': 'repeat(auto-fit, minmax(100px, 1fr))',
@@ -14,6 +21,9 @@ export default {
         'auto-fit-300': 'repeat(auto-fit, minmax(300px, 1fr))',
         'auto-fill-400': 'repeat(auto-fill, minmax(400px, 1fr))',
         'auto-fit-400': 'repeat(auto-fit, minmax(400px, 1fr))',
+      },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
       },
     },
   },

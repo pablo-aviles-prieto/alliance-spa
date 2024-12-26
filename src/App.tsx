@@ -1,11 +1,12 @@
-import { FetchData } from '@/fetch';
+import { MainContent } from '@/features/landing/components/main-content';
+import { LayoutHeader } from '@/features/layout/components/header';
 
 const App = () => {
   return (
-    <div>
-      <h1>Tailwind running</h1>
-      <FetchData />
-    </div>
+    <>
+      <LayoutHeader />
+      <MainContent />
+    </>
   );
 };
 
