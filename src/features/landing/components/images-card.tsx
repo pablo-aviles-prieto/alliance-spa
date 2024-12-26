@@ -1,7 +1,10 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { LikeIcon } from '@/assets/icons/like';
 import { ShareIcon } from '@/assets/icons/share';
 import { Image } from '@/graphql/graphql';
 import { cn } from '@/lib/utils';
+import GraphqlRepository from '@/services/graphql-repository';
 
 interface CardProps {
   image: Image;
@@ -10,6 +13,7 @@ interface CardProps {
 interface ImageActionsProps {
   likesCount: number;
   liked: boolean;
+  imageId: string;
 }
 
 interface LikeSectionProps extends ImageActionsProps {
@@ -21,6 +25,7 @@ interface FooterProps extends ImageActionsProps {
   author: string;
 }
 
+// TODO: Export into different components? (grouping it inside a image-card folder)
 const PriceBadge = ({ price }: { price: string }) => {
   return (
     <div className='absolute left-0 top-0'>
@@ -33,11 +38,13 @@ const PriceBadge = ({ price }: { price: string }) => {
   );
 };
 
-const LikeSection = ({ likesCount, liked, className }: LikeSectionProps) => {
+const LikeSection = ({ likesCount, liked, className, imageId }: LikeSectionProps) => {
+  const { mutateAsync } = useMutation(GraphqlRepository.mutateImageLikeOptions(imageId));
+
   return (
     <div className={cn('flex items-center justify-center gap-1 sm:flex-col', className)}>
       <p className='sm:order-1'>{likesCount}</p>
-      <button onClick={() => console.log('like')}>
+      <button onClick={() => mutateAsync()}>
         <LikeIcon
           className={cn('size-6 text-red-400 hover:text-red-500', liked && 'fill-current')}
         />
@@ -58,16 +65,16 @@ const ShareSection = ({ className }: { className?: string }) => {
 };
 
 // TODO?: When clicked share icon, copy the image to clipboard
-const ImageActions = ({ likesCount, liked }: ImageActionsProps) => {
+const ImageActions = ({ likesCount, liked, imageId }: ImageActionsProps) => {
   return (
     <div className='invisible absolute bottom-2 right-4 flex flex-col gap-y-3 text-white sm:group-hover:visible'>
-      <LikeSection liked={liked} likesCount={likesCount} />
+      <LikeSection imageId={imageId} liked={liked} likesCount={likesCount} />
       <ShareSection />
     </div>
   );
 };
 
-const Footer = ({ author, title, liked, likesCount }: FooterProps) => {
+const Footer = ({ author, title, liked, likesCount, imageId }: FooterProps) => {
   return (
     <footer>
       <div className='flex h-[100px] flex-col items-center justify-center border border-soft-gray px-2'>
@@ -81,6 +88,7 @@ const Footer = ({ author, title, liked, likesCount }: FooterProps) => {
           className='w-full border-r border-soft-gray'
           liked={liked}
           likesCount={likesCount}
+          imageId={imageId}
         />
         <ShareSection className='w-full' />
       </div>
@@ -105,7 +113,11 @@ export const ImagesCard = ({ image }: CardProps) => {
               />
             </picture>
             {image.likesCount ? (
-              <ImageActions likesCount={image.likesCount} liked={!!image.liked} />
+              <ImageActions
+                imageId={image.id}
+                likesCount={image.likesCount}
+                liked={!!image.liked}
+              />
             ) : null}
           </>
         )}
@@ -116,6 +128,7 @@ export const ImagesCard = ({ image }: CardProps) => {
           title={image.title}
           liked={!!image.liked}
           likesCount={image.likesCount}
+          imageId={image.id}
         />
       ) : null}
     </div>

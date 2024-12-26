@@ -15,6 +15,8 @@ import * as types from './graphql';
 const documents = {
   '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        id\n        title\n        picture\n        author\n        likesCount\n        liked\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n':
     types.GetImagesDocument,
+  '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        id\n        title\n        picture\n      }\n    }\n  }\n':
+    types.LikeImageDocument,
 };
 
 /**
@@ -23,6 +25,12 @@ const documents = {
 export function graphql(
   source: '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        id\n        title\n        picture\n        author\n        likesCount\n        liked\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n'
 ): typeof import('./graphql').GetImagesDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        id\n        title\n        picture\n      }\n    }\n  }\n'
+): typeof import('./graphql').LikeImageDocument;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

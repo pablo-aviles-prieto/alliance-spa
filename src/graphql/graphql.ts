@@ -131,6 +131,18 @@ export type GetImagesQuery = {
   };
 };
 
+export type LikeImageMutationVariables = Exact<{
+  imageId: Scalars['ID']['input'];
+}>;
+
+export type LikeImageMutation = {
+  __typename?: 'Mutation';
+  likeImage?: {
+    __typename?: 'LikeImagePayload';
+    image: { __typename?: 'Image'; id: string; title?: string | null; picture?: string | null };
+  } | null;
+};
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -169,3 +181,14 @@ export const GetImagesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetImagesQuery, GetImagesQueryVariables>;
+export const LikeImageDocument = new TypedDocumentString(`
+    mutation LikeImage($imageId: ID!) {
+  likeImage(input: {imageId: $imageId}) {
+    image {
+      id
+      title
+      picture
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<LikeImageMutation, LikeImageMutationVariables>;
