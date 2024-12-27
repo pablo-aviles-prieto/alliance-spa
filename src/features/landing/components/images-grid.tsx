@@ -1,9 +1,9 @@
 import { GridContainer } from '@/components/containers/grid-container';
 import { ImagesCard } from '@/features/landing/components/images-card/images-card';
-import { Image } from '@/graphql/graphql';
+import { ImageFieldsFragment } from '@/graphql/graphql';
 
 interface ImagesGridProps {
-  imagesData: Image[];
+  imagesData: ImageFieldsFragment[];
 }
 
 export const ImagesGrid = ({ imagesData }: ImagesGridProps) => {

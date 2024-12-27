@@ -9,9 +9,8 @@ import type {
 import { getImagesQuery } from '@/queries/get-images';
 import { likeImageMutation } from '@/queries/mutate-like-image';
 
-// TODO: Extract the endpoint in a env variable
 class GraphqlRepository {
-  private endpoint = 'https://sandbox-api-test.samyroad.com/graphql';
+  private endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT;
   private queryClient = new QueryClient();
 
   protected async execute<TResult, TVariables>(
@@ -78,6 +77,13 @@ class GraphqlRepository {
       },
       onMutate: async variables => {
         console.log('onmutate variables', variables);
+        const executedQueries = this.getQueryClient().getQueriesData({
+          predicate: query => {
+            console.log('query', query);
+            return query.queryKey.includes('get-images');
+          },
+        });
+        console.log('executedQueries', executedQueries);
       },
       onSuccess: res => {
         console.log('onsuccess res', res);

@@ -6,9 +6,9 @@ import { LayoutContentContainer } from '@/components/containers/content-layout';
 import { Spinner } from '@/components/loaders/spinner';
 import { useSearch } from '@/context/search-context';
 import { ImagesGrid } from '@/features/landing/components/images-grid';
+import { imageFieldsTypeGuard } from '@/features/landing/utils/image-fields-type-guard';
 import useIntersection from '@/hooks/use-intersection';
 import GraphqlRepository from '@/services/graphql-repository';
-import { nonNullable } from '@/utils/non-nullable';
 
 export const MainContent = () => {
   const { searchWord } = useSearch();
@@ -23,7 +23,8 @@ export const MainContent = () => {
   };
   useIntersection(nextPageRef, intersectionCallback);
 
-  const flattenedImages = data?.pages.flatMap(page => page.nodes).filter(nonNullable) || [];
+  const flattenedImages =
+    data?.pages.flatMap(page => page.nodes).filter(imageFieldsTypeGuard) || [];
 
   // TODO: Style when the flattenedImages has 0 length
   // TODO: Add a placeholder when loading data
