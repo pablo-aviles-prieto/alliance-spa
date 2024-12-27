@@ -9,6 +9,7 @@ import type {
 import { getImagesQuery } from '@/queries/get-images';
 import { likeImageMutation } from '@/queries/mutate-like-image';
 
+// TODO: Extract the endpoint in a env variable
 class GraphqlRepository {
   private endpoint = 'https://sandbox-api-test.samyroad.com/graphql';
   private queryClient = new QueryClient();
@@ -58,20 +59,30 @@ class GraphqlRepository {
     });
   }
 
-  mutateImageLikeOptions(imageId: string): UseMutationOptions {
+  // TODO: Use optimistic update, using onMutate to invalidate all the queries from the infiniteQuery
+  // retrieving the data of all the queries made starting with get-images and iterating to modify the concrete
+  // object by image id, change the like count and passing the data to onError/onSettled
+  // https://tanstack.com/query/v4/docs/framework/react/guides/optimistic-updates
+  // https://github.com/TanStack/query/discussions/3360
+  mutateImageLikeOptions(
+    imageId: string
+  ): UseMutationOptions<LikeImageMutation, Error, { imageId: string; newLikesCount: number }> {
     return {
       mutationKey: ['mutate-image-like', imageId],
-      mutationFn: async () => {
+      mutationFn: async (variables: { imageId: string; newLikesCount: number }) => {
+        const { imageId } = variables;
         const res = await this.execute<LikeImageMutation, { imageId: string }>(likeImageMutation, {
           imageId,
         });
         return res.data;
       },
-      onSuccess: () => {
+      onMutate: async variables => {
+        console.log('onmutate variables', variables);
+      },
+      onSuccess: res => {
+        console.log('onsuccess res', res);
         this.getQueryClient().invalidateQueries({
-          predicate: query => {
-            return query.queryKey.includes('get-images');
-          },
+          predicate: query => query.queryKey.includes('get-images'),
         });
       },
     };

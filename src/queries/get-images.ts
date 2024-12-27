@@ -1,17 +1,10 @@
-import { graphql } from '../graphql';
+import { graphql } from '@/graphql';
 
 export const getImagesQuery = graphql(`
   query GetImages($after: String, $title: String, $first: Int = 20) {
     images(first: $first, after: $after, title: $title) {
       nodes {
-        id
-        title
-        picture
-        author
-        likesCount
-        liked
-        createdAt
-        updatedAt
+        ...ImageFields
       }
       pageInfo {
         hasNextPage

@@ -23,7 +23,11 @@ export const LikeSection = ({ likesCount, liked, className, imageId }: LikeSecti
   return (
     <div className={cn('flex items-center justify-center gap-1 sm:flex-col', className)}>
       <p className='sm:order-1'>{likesCount}</p>
-      <button onClick={() => mutateAsync()}>
+      <button
+        onClick={() =>
+          mutateAsync({ imageId, newLikesCount: liked ? likesCount - 1 : likesCount + 1 })
+        }
+      >
         <LikeIcon
           className={cn('size-6 text-red-400 hover:text-red-500', liked && 'fill-current')}
         />

@@ -17,8 +17,6 @@ export const MainContent = () => {
   const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery(
     GraphqlRepository.getImagesQueryOptions({ title: searchWord || undefined })
   );
-  console.log('isLoading', isLoading);
-  console.log('isFetchingNextPage', isFetchingNextPage);
 
   const intersectionCallback = (isIntersecting: boolean) => {
     if (isIntersecting && hasNextPage) fetchNextPage();

@@ -106,6 +106,18 @@ export type QueryImagesArgs = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ImageFieldsFragment = {
+  __typename?: 'Image';
+  id: string;
+  title?: string | null;
+  picture?: string | null;
+  author?: string | null;
+  likesCount?: number | null;
+  liked?: boolean | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+} & { ' $fragmentName'?: 'ImageFieldsFragment' };
+
 export type GetImagesQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -116,17 +128,12 @@ export type GetImagesQuery = {
   __typename?: 'Query';
   images: {
     __typename?: 'ImageConnection';
-    nodes?: Array<{
-      __typename?: 'Image';
-      id: string;
-      title?: string | null;
-      picture?: string | null;
-      author?: string | null;
-      likesCount?: number | null;
-      liked?: boolean | null;
-      createdAt?: any | null;
-      updatedAt?: any | null;
-    } | null> | null;
+    nodes?: Array<
+      | ({ __typename?: 'Image' } & {
+          ' $fragmentRefs'?: { ImageFieldsFragment: ImageFieldsFragment };
+        })
+      | null
+    > | null;
     pageInfo: { __typename?: 'PageInfo'; hasNextPage: boolean; endCursor?: string | null };
   };
 };
@@ -139,7 +146,9 @@ export type LikeImageMutation = {
   __typename?: 'Mutation';
   likeImage?: {
     __typename?: 'LikeImagePayload';
-    image: { __typename?: 'Image'; id: string; title?: string | null; picture?: string | null };
+    image: { __typename?: 'Image' } & {
+      ' $fragmentRefs'?: { ImageFieldsFragment: ImageFieldsFragment };
+    };
   } | null;
 };
 
@@ -160,19 +169,26 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
-
+export const ImageFieldsFragmentDoc = new TypedDocumentString(
+  `
+    fragment ImageFields on Image {
+  id
+  title
+  picture
+  author
+  likesCount
+  liked
+  createdAt
+  updatedAt
+}
+    `,
+  { fragmentName: 'ImageFields' }
+) as unknown as TypedDocumentString<ImageFieldsFragment, unknown>;
 export const GetImagesDocument = new TypedDocumentString(`
     query GetImages($after: String, $title: String, $first: Int = 20) {
   images(first: $first, after: $after, title: $title) {
     nodes {
-      id
-      title
-      picture
-      author
-      likesCount
-      liked
-      createdAt
-      updatedAt
+      ...ImageFields
     }
     pageInfo {
       hasNextPage
@@ -180,15 +196,31 @@ export const GetImagesDocument = new TypedDocumentString(`
     }
   }
 }
-    `) as unknown as TypedDocumentString<GetImagesQuery, GetImagesQueryVariables>;
+    fragment ImageFields on Image {
+  id
+  title
+  picture
+  author
+  likesCount
+  liked
+  createdAt
+  updatedAt
+}`) as unknown as TypedDocumentString<GetImagesQuery, GetImagesQueryVariables>;
 export const LikeImageDocument = new TypedDocumentString(`
     mutation LikeImage($imageId: ID!) {
   likeImage(input: {imageId: $imageId}) {
     image {
-      id
-      title
-      picture
+      ...ImageFields
     }
   }
 }
-    `) as unknown as TypedDocumentString<LikeImageMutation, LikeImageMutationVariables>;
+    fragment ImageFields on Image {
+  id
+  title
+  picture
+  author
+  likesCount
+  liked
+  createdAt
+  updatedAt
+}`) as unknown as TypedDocumentString<LikeImageMutation, LikeImageMutationVariables>;
