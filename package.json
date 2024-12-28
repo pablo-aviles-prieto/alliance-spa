@@ -8,7 +8,7 @@
     "codegen:watch": "npx graphql-codegen --config codegen.ts --watch",
     "dev:codegen": "concurrently \"pnpm dev\" \"pnpm codegen:watch\"",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint './src/**/*.{js,ts,tsx,jsx}'",
     "preview": "vite preview",
     "prepare": "husky"
   },

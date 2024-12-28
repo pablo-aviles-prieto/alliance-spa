@@ -13,9 +13,11 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-  '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        id\n        title\n        picture\n        author\n        likesCount\n        liked\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n':
+  '\n  fragment ImageFields on Image {\n    id\n    title\n    picture\n    author\n    likesCount\n    liked\n    createdAt\n    updatedAt\n  }\n':
+    types.ImageFieldsFragmentDoc,
+  '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        ...ImageFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n':
     types.GetImagesDocument,
-  '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        id\n        title\n        picture\n      }\n    }\n  }\n':
+  '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        ...ImageFields\n      }\n    }\n  }\n':
     types.LikeImageDocument,
 };
 
@@ -23,13 +25,19 @@ const documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        id\n        title\n        picture\n        author\n        likesCount\n        liked\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n'
+  source: '\n  fragment ImageFields on Image {\n    id\n    title\n    picture\n    author\n    likesCount\n    liked\n    createdAt\n    updatedAt\n  }\n'
+): typeof import('./graphql').ImageFieldsFragmentDoc;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query GetImages($after: String, $title: String, $first: Int = 20) {\n    images(first: $first, after: $after, title: $title) {\n      nodes {\n        ...ImageFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n'
 ): typeof import('./graphql').GetImagesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        id\n        title\n        picture\n      }\n    }\n  }\n'
+  source: '\n  mutation LikeImage($imageId: ID!) {\n    likeImage(input: { imageId: $imageId }) {\n      image {\n        ...ImageFields\n      }\n    }\n  }\n'
 ): typeof import('./graphql').LikeImageDocument;
 
 export function graphql(source: string) {

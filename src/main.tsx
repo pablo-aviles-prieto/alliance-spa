@@ -9,7 +9,6 @@ import GraphqlRepository from '@/services/graphql-repository';
 
 import '@/index.css';
 
-// TODO: Make scrollbar thin
 // TODO: Add unit and e2e tests
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
