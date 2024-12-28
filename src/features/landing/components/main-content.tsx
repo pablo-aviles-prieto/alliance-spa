@@ -26,7 +26,6 @@ export const MainContent = () => {
   const flattenedImages =
     data?.pages.flatMap(page => page.nodes).filter(imageFieldsTypeGuard) || [];
 
-  // TODO: Add a placeholder when loading data
   return (
     <main className='bg-secondary'>
       <LayoutContentContainer

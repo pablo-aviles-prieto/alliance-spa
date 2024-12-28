@@ -1,19 +1,29 @@
 import { ImageActions } from '@/features/landing/components/images-card/actions';
 import { Footer } from '@/features/landing/components/images-card/footer';
 import { PriceBadge } from '@/features/landing/components/images-card/price-badge';
-import { Image } from '@/graphql/graphql';
+import { Image, Maybe } from '@/graphql/graphql';
 
 interface CardProps {
   image: Image;
 }
 
-// TODO: If no price, not show pricebadge (if not a single item has price, display it
-// based on >200 likes a random price)
 export const ImagesCard = ({ image }: CardProps) => {
+  const displayPrice = (
+    price: Maybe<number> | undefined,
+    likesCount: Maybe<number> | undefined
+  ) => {
+    if (price) return price.toString();
+    if (likesCount && likesCount > 200) return `${likesCount}.00`;
+
+    return '0';
+  };
+
   return (
     <div className='group mx-auto size-full'>
       <header className='relative'>
-        <PriceBadge price='0.00' />
+        {image.price || (image.likesCount && image.likesCount > 200) ? (
+          <PriceBadge price={displayPrice(image.price, image.likesCount)} />
+        ) : null}
         {image.picture && (
           <>
             <picture>
