@@ -1,13 +1,28 @@
-import { infiniteQueryOptions, QueryClient, UseMutationOptions } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  infiniteQueryOptions,
+  QueryClient,
+  QueryKey,
+  UseMutationOptions,
+} from '@tanstack/react-query';
 
 import type {
   GetImagesQuery,
   GetImagesQueryVariables,
+  ImageFieldsFragment,
   LikeImageMutation,
   TypedDocumentString,
 } from '@/graphql/graphql';
 import { getImagesQuery } from '@/queries/get-images';
 import { likeImageMutation } from '@/queries/mutate-like-image';
+
+type QueryTypes = 'getImages' | 'mutateLikes';
+
+interface ImageLikeOptionsVariables {
+  imageId: string;
+  newLikesCount: number;
+  isLiked: boolean;
+}
 
 class GraphqlRepository {
   private endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT;
@@ -36,13 +51,24 @@ class GraphqlRepository {
     return response.json();
   }
 
+  protected getRootQueryKey(queryType: QueryTypes) {
+    switch (queryType) {
+      case 'getImages':
+        return 'get-images';
+      case 'mutateLikes':
+        return 'mutate-image-like';
+      default:
+        return '';
+    }
+  }
+
   getQueryClient() {
     return this.queryClient;
   }
 
   getImagesQueryOptions(variables: GetImagesQueryVariables) {
     return infiniteQueryOptions({
-      queryKey: ['get-images', variables],
+      queryKey: [this.getRootQueryKey('getImages'), variables],
       queryFn: async ({ pageParam }) => {
         const enhancedVariables = pageParam ? { ...variables, after: pageParam } : variables;
         const result = await this.execute<GetImagesQuery, GetImagesQueryVariables>(
@@ -58,17 +84,17 @@ class GraphqlRepository {
     });
   }
 
-  // TODO: Use optimistic update, using onMutate to invalidate all the queries from the infiniteQuery
-  // retrieving the data of all the queries made starting with get-images and iterating to modify the concrete
-  // object by image id, change the like count and passing the data to onError/onSettled
-  // https://tanstack.com/query/v4/docs/framework/react/guides/optimistic-updates
-  // https://github.com/TanStack/query/discussions/3360
   mutateImageLikeOptions(
     imageId: string
-  ): UseMutationOptions<LikeImageMutation, Error, { imageId: string; newLikesCount: number }> {
+  ): UseMutationOptions<
+    LikeImageMutation,
+    Error,
+    ImageLikeOptionsVariables,
+    [QueryKey, InfiniteData<GetImagesQuery['images']> | null | undefined][]
+  > {
     return {
-      mutationKey: ['mutate-image-like', imageId],
-      mutationFn: async (variables: { imageId: string; newLikesCount: number }) => {
+      mutationKey: [this.getRootQueryKey('mutateLikes'), imageId],
+      mutationFn: async variables => {
         const { imageId } = variables;
         const res = await this.execute<LikeImageMutation, { imageId: string }>(likeImageMutation, {
           imageId,
@@ -76,19 +102,52 @@ class GraphqlRepository {
         return res.data;
       },
       onMutate: async variables => {
-        console.log('onmutate variables', variables);
-        const executedQueries = this.getQueryClient().getQueriesData({
-          predicate: query => {
-            console.log('query', query);
-            return query.queryKey.includes('get-images');
-          },
+        const queryClient = this.getQueryClient();
+        const getImagesQueries: [
+          QueryKey,
+          InfiniteData<GetImagesQuery['images']> | null | undefined,
+        ][] = queryClient.getQueriesData({
+          predicate: query => query.queryKey.includes(this.getRootQueryKey('getImages')),
         });
-        console.log('executedQueries', executedQueries);
+
+        getImagesQueries.forEach(async ([queryKey]) => {
+          await queryClient.cancelQueries({ queryKey });
+          queryClient.setQueryData<InfiniteData<GetImagesQuery['images']> | null | undefined>(
+            queryKey,
+            oldData => {
+              if (oldData) {
+                return {
+                  ...oldData,
+                  pages: oldData.pages.map(page => {
+                    return {
+                      ...page,
+                      nodes: page.nodes?.map(image =>
+                        (image as ImageFieldsFragment).id === variables.imageId
+                          ? {
+                              ...image,
+                              likesCount: variables.newLikesCount,
+                              liked: variables.isLiked,
+                            }
+                          : image
+                      ),
+                    };
+                  }),
+                };
+              }
+            }
+          );
+        });
+
+        return getImagesQueries;
       },
-      onSuccess: res => {
-        console.log('onsuccess res', res);
+      onError: (_err, _variables, context) => {
+        context?.forEach(([queryKey, previousData]) => {
+          this.getQueryClient().setQueryData(queryKey, previousData);
+        });
+      },
+      onSettled: () => {
         this.getQueryClient().invalidateQueries({
-          predicate: query => query.queryKey.includes('get-images'),
+          predicate: query => query.queryKey.includes(this.getRootQueryKey('getImages')),
         });
       },
     };

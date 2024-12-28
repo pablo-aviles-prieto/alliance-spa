@@ -25,7 +25,11 @@ export const LikeSection = ({ likesCount, liked, className, imageId }: LikeSecti
       <p className='sm:order-1'>{likesCount}</p>
       <button
         onClick={() =>
-          mutateAsync({ imageId, newLikesCount: liked ? likesCount - 1 : likesCount + 1 })
+          mutateAsync({
+            imageId,
+            newLikesCount: liked ? likesCount - 1 : likesCount + 1,
+            isLiked: !liked,
+          })
         }
       >
         <LikeIcon
