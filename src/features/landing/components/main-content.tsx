@@ -26,7 +26,6 @@ export const MainContent = () => {
   const flattenedImages =
     data?.pages.flatMap(page => page.nodes).filter(imageFieldsTypeGuard) || [];
 
-  // TODO: Style when the flattenedImages has 0 length
   // TODO: Add a placeholder when loading data
   return (
     <main className='bg-secondary'>
@@ -34,7 +33,13 @@ export const MainContent = () => {
         as='main'
         className='min-h-[calc(100vh-var(--header-height))] py-7 xl:py-14'
       >
-        <ImagesGrid imagesData={flattenedImages} />
+        {flattenedImages.length > 0 ? (
+          <ImagesGrid imagesData={flattenedImages} />
+        ) : searchWord ? (
+          <h1 className='text-center text-xl'>No results found for "{searchWord}"</h1>
+        ) : (
+          <h1 className='text-center text-xl'>No items to display</h1>
+        )}
         {isFetchingNextPage && (
           <div className='my-6 flex items-center justify-center'>
             <Spinner />
