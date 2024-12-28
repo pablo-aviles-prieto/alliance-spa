@@ -33,8 +33,8 @@ export const MainContent = () => {
         as='main'
         className='min-h-[calc(100vh-var(--header-height))] py-7 xl:py-14'
       >
-        {flattenedImages.length > 0 ? (
-          <ImagesGrid imagesData={flattenedImages} />
+        {flattenedImages.length > 0 || isLoading ? (
+          <ImagesGrid imagesData={flattenedImages} isLoading={isLoading} />
         ) : searchWord ? (
           <h1 className='text-center text-xl'>No results found for "{searchWord}"</h1>
         ) : (
