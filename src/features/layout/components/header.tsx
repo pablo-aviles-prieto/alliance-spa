@@ -5,16 +5,17 @@ import { LayoutContentContainer } from '@/components/containers/content-layout';
 import { useSearch } from '@/context/search-context';
 import { HeaderSearchInput } from '@/features/layout/components/search-input';
 import { useDebounce } from '@/hooks/use-debounce';
+import { getCurrentUrl } from '@/utils/get-current-url';
 
 export const LayoutHeader = () => {
-  const url = new URL(window.location.href);
+  const url = getCurrentUrl();
   const initialSearch = url.searchParams.get('search') || '';
   const [searchInput, setSearchInput] = useState(initialSearch);
   const { setSearchWord } = useSearch();
 
   const debounceCallback = (value: string) => {
     setSearchWord(value);
-    const url = new URL(window.location.href);
+    const url = getCurrentUrl();
     if (value) {
       url.searchParams.set('search', value);
     } else {

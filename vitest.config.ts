@@ -8,11 +8,13 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      environment: 'jsdom',
       browser: {
         enabled: true,
         name: 'chromium',
         provider: 'playwright',
       },
+      globals: true,
     },
   })
 );
