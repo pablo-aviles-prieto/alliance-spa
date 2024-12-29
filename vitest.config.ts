@@ -8,6 +8,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      include: ['src/tests/unit/**/*.{test,spec}.{ts,tsx}'],
       environment: 'jsdom',
       browser: {
         enabled: true,

@@ -11,8 +11,12 @@
     "lint": "eslint './src/**/*.{js,ts,tsx,jsx}'",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:unit": "vitest",
+    "coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:debug": "playwright test --debug",
+    "test:all": "pnpm test:unit && pnpm test:e2e"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
@@ -31,6 +35,8 @@
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
     "@parcel/watcher": "^2.5.0",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.2",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
