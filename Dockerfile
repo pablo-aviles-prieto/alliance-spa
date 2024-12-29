@@ -1,14 +1,20 @@
-FROM node:18-alpine
+FROM node:20-slim AS base
 
-RUN mkdir -p /home/app
-WORKDIR /home/app
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-COPY package*.json .
+FROM base AS prod
 
-RUN pnpm install --frozen-lockfile
+COPY pnpm-lock.yaml /app
+WORKDIR /app
+RUN pnpm fetch --prod
 
-COPY . .
+COPY . /app
+RUN pnpm run build
 
-RUN pnpm build
+FROM base
+COPY --from=prod /app/node_modules /app/node_modules
+COPY --from=prod /app/dist /app/dist
 
 CMD ["pnpm", "preview"]
