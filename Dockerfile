@@ -6,15 +6,18 @@ RUN corepack enable
 
 FROM base AS prod
 
-COPY pnpm-lock.yaml /app
 WORKDIR /app
+COPY pnpm-lock.yaml /app
+COPY package.json /app
 RUN pnpm fetch --prod
 
 COPY . /app
 RUN pnpm run build
 
 FROM base
+WORKDIR /app
 COPY --from=prod /app/node_modules /app/node_modules
+COPY --from=prod /app/package.json /app/package.json
 COPY --from=prod /app/dist /app/dist
 
 CMD ["pnpm", "preview"]
