@@ -19,7 +19,7 @@ export const ImagesCard = ({ image }: CardProps) => {
   };
 
   return (
-    <div className='group mx-auto size-full'>
+    <div data-testid='image-card' className='group mx-auto size-full'>
       <header className='relative'>
         {image.price || (image.likesCount && image.likesCount > 200) ? (
           <PriceBadge price={displayPrice(image.price, image.likesCount)} />
