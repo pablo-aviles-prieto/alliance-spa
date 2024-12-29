@@ -102,4 +102,24 @@ test.describe('Landing end 2 end', () => {
       page.getByText(`No results found for "some search query"`, { exact: true })
     ).toBeVisible();
   });
+
+  test.only('Display image actions on hover', async ({ page }) => {
+    await mockGraphqlResponse(page, [
+      {
+        id: '1',
+        title: 'Mock 1',
+        picture: 'https://loremflickr.com/300/300',
+        author: 'Seurat',
+        likesCount: 35,
+        liked: true,
+        createdAt: '2024-12-10T17:22:57Z',
+        updatedAt: '2024-12-28T16:02:17Z',
+      },
+    ]);
+
+    const imageActions = page.getByTestId('image-actions');
+    await expect(imageActions).toBeHidden();
+    await page.getByTestId('image-card').hover();
+    await expect(imageActions).toBeVisible();
+  });
 });
