@@ -1,13 +1,24 @@
-import { describe, expect, test, vi } from 'vitest';
-import { render } from 'vitest-browser-react';
+import { beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+import { render, RenderResult } from 'vitest-browser-react';
 
 import { HeaderSearchInput } from '@/features/layout/components/search-input';
 
+interface SearchInputTest {
+  renderSearchInput: RenderResult;
+  mockFn: Mock;
+}
+
 describe('Header Search Input', () => {
-  test('renders input with correct value', async () => {
-    const { getByPlaceholder } = render(
-      <HeaderSearchInput value='test search' onChangeHandler={Function} />
+  const mockFn = vi.fn();
+  beforeEach<SearchInputTest>(async context => {
+    context.renderSearchInput = render(
+      <HeaderSearchInput value='test search' onChangeHandler={mockFn} />
     );
+    context.mockFn = mockFn;
+  });
+
+  test<SearchInputTest>('renders input with correct value', async ({ renderSearchInput }) => {
+    const { getByPlaceholder } = renderSearchInput;
 
     const input = getByPlaceholder("You're looking for something?");
     const inputElement = input.element();
@@ -16,27 +27,27 @@ describe('Header Search Input', () => {
     expect(value).toBe('test search');
   });
 
-  test('calls onChangeHandler when input changes', async () => {
-    const mockHandler = vi.fn();
-    const { getByPlaceholder } = render(
-      <HeaderSearchInput value='test search' onChangeHandler={mockHandler} />
-    );
+  test<SearchInputTest>('calls onChangeHandler when input changes', async ({
+    renderSearchInput,
+    mockFn,
+  }) => {
+    const { getByPlaceholder } = renderSearchInput;
 
     const input = getByPlaceholder("You're looking for something?");
     await input.fill('new search value');
 
-    expect(mockHandler).toHaveBeenCalledWith('new search value');
+    expect(mockFn).toHaveBeenCalledWith('new search value');
   });
 
-  test('pass empty string to the change handler function', async () => {
-    const mockHandler = vi.fn();
-    const { getByRole } = render(
-      <HeaderSearchInput value='test search' onChangeHandler={mockHandler} />
-    );
+  test<SearchInputTest>('pass empty string to the change handler function', async ({
+    renderSearchInput,
+    mockFn,
+  }) => {
+    const { getByRole } = renderSearchInput;
 
     const clearButton = getByRole('button');
     await clearButton.click();
 
-    expect(mockHandler).toHaveBeenCalledWith('');
+    expect(mockFn).toHaveBeenCalledWith('');
   });
 });
