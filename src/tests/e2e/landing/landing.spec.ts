@@ -103,7 +103,7 @@ test.describe('Landing end 2 end', () => {
     ).toBeVisible();
   });
 
-  test.only('Display image actions on hover', async ({ page }) => {
+  test('Display image actions on hover', async ({ page }) => {
     await mockGraphqlResponse(page, [
       {
         id: '1',
@@ -121,5 +121,34 @@ test.describe('Landing end 2 end', () => {
     await expect(imageActions).toBeHidden();
     await page.getByTestId('image-card').hover();
     await expect(imageActions).toBeVisible();
+  });
+
+  test('Display price badge when price exists', async ({ page }) => {
+    await mockGraphqlResponse(page, [
+      {
+        id: '1',
+        title: 'Mock 1',
+        picture: 'https://loremflickr.com/300/300',
+        author: 'Seurat',
+        likesCount: 35,
+        liked: true,
+        createdAt: '2024-12-10T17:22:57Z',
+        updatedAt: '2024-12-28T16:02:17Z',
+      },
+      {
+        id: '1',
+        title: 'Mock 2',
+        picture: 'https://loremflickr.com/300/300',
+        author: 'Seurat',
+        likesCount: 35,
+        liked: true,
+        createdAt: '2024-12-10T17:22:57Z',
+        updatedAt: '2024-12-28T16:02:17Z',
+        price: 44.23,
+      },
+    ]);
+
+    const priceBadge = page.getByTestId('price-badge');
+    await expect(priceBadge).toHaveCount(1);
   });
 });
