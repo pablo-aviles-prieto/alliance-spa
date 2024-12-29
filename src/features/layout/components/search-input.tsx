@@ -18,7 +18,7 @@ export const HeaderSearchInput = ({ value, onChangeHandler }: SearchInputProps) 
         onChange={e => onChangeHandler(e.target.value)}
       />
       {value && (
-        <button onClick={() => onChangeHandler('')}>
+        <button data-testid='clear-search-button' onClick={() => onChangeHandler('')}>
           <XCircle className='size-5 shrink-0 text-gray-400' />
         </button>
       )}

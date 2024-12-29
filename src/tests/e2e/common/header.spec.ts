@@ -29,4 +29,11 @@ test.describe('Header end 2 end', () => {
       page.getByText(`No results found for "some search query"`, { exact: true })
     ).toBeVisible();
   });
+
+  test('Input clear button', async ({ page }) => {
+    const inputElement = page.locator('input[type="text"]');
+    await inputElement.fill('test');
+    await page.getByTestId('clear-search-button').click();
+    expect(await inputElement.inputValue()).toBe('');
+  });
 });
