@@ -9,7 +9,8 @@ FROM base AS prod
 WORKDIR /app
 COPY pnpm-lock.yaml /app
 COPY package.json /app
-RUN pnpm fetch --prod
+RUN pnpm install --frozen-lockfile
+# RUN pnpm fetch --prod
 
 COPY . /app
 RUN pnpm run build
@@ -20,4 +21,4 @@ COPY --from=prod /app/node_modules /app/node_modules
 COPY --from=prod /app/package.json /app/package.json
 COPY --from=prod /app/dist /app/dist
 
-CMD ["pnpm", "preview"]
+CMD ["pnpm", "dev"]
